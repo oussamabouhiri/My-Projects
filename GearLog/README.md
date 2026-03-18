@@ -6,12 +6,12 @@
 
 It allows users to:
 
-* View all assets in a dashboard
-* Add new devices
-* Edit existing records
-* Delete assets
-* Search and filter assets dynamically
-* View total inventory value
+- View all assets in a dashboard
+- Add new devices
+- Edit existing records
+- Delete assets
+- Search and filter assets dynamically
+- View total inventory value
 
 ---
 
@@ -19,9 +19,9 @@ It allows users to:
 
 Build a secure and functional asset management system using:
 
-* PHP (Backend)
-* MySQL (Database)
-* HTML/CSS (Frontend)
+- PHP (Backend)
+- MySQL (Database)
+- HTML/CSS (Frontend)
 
 ---
 
@@ -75,57 +75,57 @@ gearlog/
 
 ### 📊 Dashboard (index.php)
 
-* Displays all assets using **INNER JOIN**
-* Shows category name instead of ID
-* Displays total inventory value using `SUM(price)`
-* Search by device name or serial number
-* Filter by status (In Use / Available / Maintenance)
+- Displays all assets using **INNER JOIN**
+- Shows category name instead of ID
+- Displays total inventory value using `SUM(price)`
+- Search by device name or serial number
+- Filter by status (In Use / Available / Maintenance)
 
 ---
 
 ### ➕ Add Asset (add.php)
 
-* Insert new asset into database
-* Uses prepared statements
+- Insert new asset into database
+- Uses prepared statements
 
 ---
 
 ### ✏️ Edit Asset (edit.php)
 
-* Update existing asset
-* Pre-filled form with current data
+- Update existing asset
+- Pre-filled form with current data
 
 ---
 
 ### ❌ Delete Asset (delete.php)
 
-* Remove asset from database
-* Confirmation before deletion
+- Remove asset from database
+- Confirmation before deletion
 
 ---
 
 ## 🎨 UI / UX
 
-* Clean dashboard layout
-* Responsive design
-* Status color indicators:
+- Clean dashboard layout
+- Responsive design
+- Status color indicators:
+  - 🟢 In Use
+  - 🔵 Available
+  - 🔴 Maintenance
 
-  * 🟢 In Use
-  * 🔵 Available
-  * 🔴 Maintenance
-* Table optimized for readability (like admin dashboards)
+- Table optimized for readability (like admin dashboards)
 
 ---
 
 ## 🧠 Key Concepts Learned
 
-* Relational Databases & Foreign Keys
-* SQL JOIN & Aggregation (SUM)
-* PHP PDO & Error Handling
-* Web Security Basics (SQL Injection & XSS)
-* CRUD Operations
-* Dynamic Search & Filtering
-* UI/UX Design for Data Tables
+- Relational Databases & Foreign Keys
+- SQL JOIN & Aggregation (SUM)
+- PHP PDO & Error Handling
+- Web Security Basics (SQL Injection & XSS)
+- CRUD Operations
+- Dynamic Search & Filtering
+- UI/UX Design for Data Tables
 
 ---
 
@@ -149,11 +149,11 @@ http://localhost/gearlog/
 
 ## 📌 Future Improvements
 
-* Authentication system (Login)
-* Pagination
-* Sorting columns
-* Bootstrap integration
-* OOP structure (Classes)
+- Authentication system (Login)
+- Pagination
+- Sorting columns
+- Bootstrap integration
+- OOP structure (Classes)
 
 ---
 
@@ -161,13 +161,13 @@ http://localhost/gearlog/
 
 This project is part of my learning journey with:
 
-* Simplon Maghreb
-* JobInTech
-* Simplon Academy
+- Simplon Maghreb
+- JobInTech
+- Simplon Academy
 
 ---
 
 ## 💬 Author
 
-Developed by **[Your Name]**
+Developed by **OUSSAMA BOUHIRI**
 Passionate about Web Development & Backend Engineering 🚀
