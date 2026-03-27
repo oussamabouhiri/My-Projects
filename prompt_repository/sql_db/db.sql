@@ -1,72 +1,107 @@
-create database prompt_repository;
-use prompt_repository;
-create table users(
-	id integer AUTO_INCREMENT PRIMARY KEY,
-    name varchar(100),
-    email varchar(100) UNIQUE,
-    `password` varchar(255),
-    created_at DATE
+-- ============================================================
+-- Prompt Repository — Database Schema & Seed Data
+-- DevGenius Solutions
+-- ============================================================
+
+CREATE DATABASE IF NOT EXISTS prompt_repository
+    CHARACTER SET utf8
+    COLLATE utf8_general_ci;
+
+USE prompt_repository;
+
+-- ── DROP ORDER (respect FK) ──────────────────────────────────
+DROP TABLE IF EXISTS prompts;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
+
+-- ── USERS ────────────────────────────────────────────────────
+CREATE TABLE users (
+    id         INT          AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(100) NOT NULL,
+    email      VARCHAR(150) NOT NULL UNIQUE,
+    password   VARCHAR(255) NOT NULL,
+    role       ENUM('admin','user') NOT NULL DEFAULT 'user',
+    created_at DATETIME     NOT NULL DEFAULT NOW()
 );
 
-create table categories(
-	id integer AUTO_INCREMENT PRIMARY KEY,
-    name varchar(100)
-);
-create table prompts(
-	id integer AUTO_INCREMENT PRIMARY KEY,
-    title varchar(100),
-    content text,
-    user_id integer ,
-    category_id integer,
-    created_at DATETIME,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+-- ── CATEGORIES ───────────────────────────────────────────────
+CREATE TABLE categories (
+    id   INT          AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
 );
 
+-- ── PROMPTS ──────────────────────────────────────────────────
+CREATE TABLE prompts (
+    id          INT  AUTO_INCREMENT PRIMARY KEY,
+    title       VARCHAR(200) NOT NULL,
+    content     TEXT         NOT NULL,
+    user_id     INT          NOT NULL,
+    category_id INT          NOT NULL,
+    created_at  DATETIME     NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_prompt_user     FOREIGN KEY (user_id)     REFERENCES users(id)      ON DELETE CASCADE,
+    CONSTRAINT fk_prompt_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT
+);
+
+-- ── SEED: CATEGORIES ─────────────────────────────────────────
 INSERT INTO categories (name) VALUES
 ('Code'),
-('Marketing'),
-('DevOps'),
 ('SQL'),
-('AI'),
+('DevOps'),
+('Marketing'),
+('Documentation'),
 ('Testing'),
-('Security'),
-('Frontend'),
-('Backend'),
-('Data Science');
+('Security');
 
-INSERT INTO users (name, email, password, created_at) VALUES
-('Ali Ahmed', 'ali@example.com', 'Ali@1234', '2026-03-20'),
-('Sara Ben', 'sara@example.com', 'Sara@1234', '2026-03-21'),
-('Youssef Karim', 'youssef@example.com', 'Youss@1234', '2026-03-21'),
-('Nadia Amine', 'nadia@example.com', 'Nadia@1234', '2026-03-22'),
-('Omar Hassan', 'omar@example.com', 'Omar@1234', '2026-03-22'),
-('Lina Idrissi', 'lina@example.com', 'Lina@1234', '2026-03-23'),
-('Karim Said', 'karim@example.com', 'Karim@1234', '2026-03-23'),
-('Fatima Zahra', 'fatima@example.com', 'Fatima@1234', '2026-03-24'),
-('Hassan Rami', 'hassan@example.com', 'Hassan@1234', '2026-03-24'),
-('Salma Noor', 'salma@example.com', 'Salma@1234', '2026-03-25');
+-- ── SEED: USERS ──────────────────────────────────────────────
+-- To generate a hash run: php -r "echo password_hash('DevGenius@2024', PASSWORD_DEFAULT);"
+-- Replace each HASH_PLACEHOLDER below with the generated hash.
+-- Plain-text password for ALL seed accounts: DevGenius@2024
 
+INSERT INTO users (name, email, password, role) VALUES
+('Admin',        'admin@devgenius.io', 'HASH_PLACEHOLDER', 'admin'),
+('Alice Martin', 'alice@devgenius.io', 'HASH_PLACEHOLDER', 'user'),
+('Bob Dupont',   'bob@devgenius.io',   'HASH_PLACEHOLDER', 'user'),
+('Clara Petit',  'clara@devgenius.io', 'HASH_PLACEHOLDER', 'user');
+
+-- ── SEED: PROMPTS ────────────────────────────────────────────
 INSERT INTO prompts (title, content, user_id, category_id, created_at) VALUES
-('Generate login system', 'Create a secure login system in PHP using sessions', 1, 1, '2026-03-25'),
-('SEO strategy', 'Give me a full SEO plan for a tech startup', 2, 2, '2026-03-25'),
-('Docker setup', 'Write a Dockerfile for a PHP MySQL app', 3, 3, '2026-03-24'),
-('SQL optimization', 'Optimize this SQL query for better performance', 4, 4, '2026-03-24'),
-('AI chatbot', 'Build a chatbot using OpenAI API in PHP', 5, 5, '2026-03-23'),
-('Unit testing', 'Write PHPUnit tests for a login system', 6, 6, '2026-03-23'),
-('Security audit', 'Check this PHP code for vulnerabilities', 7, 7, '2026-03-22'),
-('Responsive UI', 'Create responsive navbar using CSS and Bootstrap', 8, 8, '2026-03-22'),
-('REST API', 'Build a REST API in PHP with CRUD operations', 9, 9, '2026-03-21'),
-('Data analysis', 'Analyze dataset using Python and pandas', 10, 10, '2026-03-21'),
-('Form validation', 'Validate form inputs in PHP securely', 1, 1, '2026-03-20'),
-('Email campaign', 'Create a marketing email campaign template', 2, 2, '2026-03-20'),
-('CI/CD pipeline', 'Explain CI/CD pipeline using GitHub Actions', 3, 3, '2026-03-19'),
-('Database schema', 'Design a scalable database schema for blog', 4, 4, '2026-03-19'),
-('AI content writing', 'Generate blog post using AI tools', 5, 5, '2026-03-18');
-
-
-ALTER TABLE users
-ADD COLUMN role varchar(50) AFTER `password`;
-
-UPDATE users SET role = 'admin' WHERE id IN (1, 2, 3, 4);
-UPDATE users SET role = 'user' WHERE id IN (5, 6, 7, 8, 9, 10);
+(
+  'Generate a REST API in PHP',
+  'Act as a senior PHP developer. Generate a complete RESTful API for a [resource] with endpoints for CRUD operations. Use PDO for database interaction and return JSON responses. Include proper HTTP status codes (200, 201, 400, 404, 500) and robust input validation.',
+  2, 1, NOW()
+),
+(
+  'Write an Optimized SQL Stored Procedure',
+  'Act as a database expert. Write an optimized MySQL stored procedure for [task]. Include error handling with SIGNAL SQLSTATE, use transactions where necessary, and comment each section. Follow best practices for index usage and query performance.',
+  3, 2, NOW()
+),
+(
+  'Docker Compose Multi-Service Setup',
+  'Act as a DevOps engineer. Create a production-ready docker-compose.yml for a [LAMP / MEAN / etc.] stack. Include: web server, database, caching layer. Configure named volumes for data persistence, set up bridge networking, and provide an .env template.',
+  4, 3, NOW()
+),
+(
+  'SEO Blog Post Outline Generator',
+  'Act as a senior content strategist. Create a detailed SEO-optimized outline for "[topic]". Provide: H1 title, meta description ≤160 chars, H2/H3 structure, target keywords, internal linking suggestions, and a strong CTA. Target audience: [audience].',
+  2, 4, NOW()
+),
+(
+  'OpenAPI Documentation Template',
+  'Act as a technical writer. Generate full OpenAPI 3.0 documentation for this endpoint: [endpoint details]. Include: description, all parameters, request body schema, success response schemas, error schemas, and usage examples in cURL and JavaScript fetch.',
+  3, 5, NOW()
+),
+(
+  'PHPUnit Test Suite Generator',
+  'Act as a QA engineer. Write comprehensive PHPUnit tests for this PHP class/function: [code]. Cover happy-path, edge cases, error scenarios, and input validation. Use mocking where appropriate and follow the AAA pattern (Arrange, Act, Assert).',
+  4, 6, NOW()
+),
+(
+  'SQL Query Performance Audit',
+  'Analyze this SQL query and propose optimizations: [query]. Consider: index usage, JOIN vs subquery efficiency, SELECT * avoidance, and execution plan analysis. Return the optimized query with a brief explanation of each change.',
+  2, 2, NOW()
+),
+(
+  'PHP Code Security Review',
+  'Act as a cybersecurity expert. Review this PHP code for vulnerabilities: [code]. Check for: SQL injection, XSS, CSRF, insecure session handling, sensitive data exposure, and improper input validation. Rate each finding (Critical / High / Medium / Low) and suggest concrete fixes.',
+  3, 7, NOW()
+);
